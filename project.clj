@@ -6,6 +6,6 @@
   :dependencies [[org.clojure/clojure "1.8.0"]
                  [opencv/opencv "2.4.12"]
                  [opencv/opencv-native "2.4.12"]]
-  :main ^:skip-aot bejeweled-bot.core
+  :main bejeweled-bot.core
   :target-path "target/%s"
   :profiles {:uberjar {:aot :all}})
