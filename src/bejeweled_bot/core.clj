@@ -13,6 +13,8 @@
 ;Mat mat = new Mat(width, height, CvType.CV_8UC3);
 ;mat.put(0, 0, data);
 
+(use 'bejeweled-bot.gems)
+
 (defn -main
   "I'm a doc string"
   [& args]
