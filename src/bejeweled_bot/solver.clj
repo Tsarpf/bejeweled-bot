@@ -5,7 +5,6 @@
   (first (drop-while #(= nil %) (solve gem-array))))
 
 (defn solve
-  "puikula"
   [gem-array]
   (map-indexed
     (fn [colIdx col]
@@ -41,15 +40,6 @@
       :else nil)))
 
 
-(def x 0)
-(def y 1)
-(def down-y (+ y 1))
-(def gem-type :opal)
-(def down-gem-type (get-in testArray [x (+ y 1)]))
-(def swapd (assoc-in (assoc-in testArray [x (+ y 1)] gem-type) [x y] down-gem-type))
-(def down-swap swapd)
-(def gem-array swapd)
-(would-match x down-y gem-type down-swap) {:x x :y y :dir "down" :debug 2 :gemtype gem-type}
 (defn would-match [y x gem-type gem-array]
   (and (not (= gem-type nil))
   (or
@@ -78,14 +68,26 @@
       (get-in gem-array [x (+ y 1)])
       gem-type))))
 
-(def testArray
-  [[:ruby        :opal     :ruby       :diamond    :topaz    :amethyst   :sapphire :sapphire]
-   [:ruby        :diamond  :amethyst   :diamond    :opal     :smaragdine :sapphire :smaragdine]
-   [:topaz       :diamond  :smaragdine :topaz      :opal     :diamond    :amethyst :ruby]
-   [:sapphire    :opal     :sapphire   :topaz      :sapphire :smaragdine :ruby     :ruby]
-   [:amethyst    :opal     :diamond    :smaragdine :amethyst :ruby       :opal     :opal]
-   [:topaz       :amethyst :amethyst   :smaragdine :amethyst :topaz      :sapphire :amethyst]
-   [:smaragdine  :topaz    :opal       :opal       :sapphire :ruby       :amethyst :sapphire]
-   [:amethyst    :sapphire :diamond    :amethyst   :diamond  :topaz      :opal     :opal]])
 
-(getFirst testArray)
+;; Repl test code
+;
+;(def x 0)
+;(def y 1)
+;(def down-y (+ y 1))
+;(def gem-type :opal)
+;(def down-gem-type (get-in testArray [x (+ y 1)]))
+;(def swapd (assoc-in (assoc-in testArray [x (+ y 1)] gem-type) [x y] down-gem-type))
+;(def down-swap swapd)
+;(def gem-array swapd)
+;(would-match x down-y gem-type down-swap) {:x x :y y :dir "down" :debug 2 :gemtype gem-type}
+;(def testArray
+;  [[:ruby        :opal     :ruby       :diamond    :topaz    :amethyst   :sapphire :sapphire]
+;   [:ruby        :diamond  :amethyst   :diamond    :opal     :smaragdine :sapphire :smaragdine]
+;   [:topaz       :diamond  :smaragdine :topaz      :opal     :diamond    :amethyst :ruby]
+;   [:sapphire    :opal     :sapphire   :topaz      :sapphire :smaragdine :ruby     :ruby]
+;   [:amethyst    :opal     :diamond    :smaragdine :amethyst :ruby       :opal     :opal]
+;   [:topaz       :amethyst :amethyst   :smaragdine :amethyst :topaz      :sapphire :amethyst]
+;   [:smaragdine  :topaz    :opal       :opal       :sapphire :ruby       :amethyst :sapphire]
+;   [:amethyst    :sapphire :diamond    :amethyst   :diamond  :topaz      :opal     :opal]])
+;
+;(getFirst testArray)
