@@ -3,7 +3,6 @@
   (:import java.awt.event.InputEvent)
   (:gen-class))
 
-
 (clojure.lang.RT/loadLibrary org.opencv.core.Core/NATIVE_LIBRARY_NAME)
 (import '[org.opencv.core Mat Size CvType Core Point Scalar]
         '[org.opencv.highgui Highgui]
@@ -13,7 +12,6 @@
 ;Mat mat = new Mat(width, height, CvType.CV_8UC3);
 ;mat.put(0, 0, data);
 
-(use 'bejeweled-bot.gems)
 (use 'bejeweled-bot.pixel-sampler)
 
 (defn -main
@@ -53,20 +51,15 @@
   (def row (Math/floor (/ (:idx derp) cols)))
   (def col (mod (:idx derp) cols))
 
-  (println col row)
-  (println targetCols targetRows)
+  (def seees (sample-pixels col row (+ col targetCols) (+ row targetRows) displayImg))
+  (println seees)
 
-  (Core/rectangle displayImg (Point. col row) (Point. (+ col targetCols) (+ row targetRows)) (Scalar. 0 0 255))
-  (Core/rectangle result (Point. col row) (Point. (+ col targetCols) (+ row targetRows)) (Scalar. 0 0 255))
-  (Highgui/imwrite "resources/output.png" displayImg)
-  (Highgui/imwrite "resources/output2.png" result)
 
-  ;(let [robo (Robot.)]
-  ;  (.mousePress robo InputEvent/BUTTON1_MASK)
-  ;  (.mouseMove robo 1600 100)
-  ;  (.mouseRelease robo InputEvent/BUTTON1_MASK)
-  ;  ))
 
+  ;;(Core/rectangle displayImg (Point. col row) (Point. (+ col targetCols) (+ row targetRows)) (Scalar. 0 0 255))
+  ;(Core/rectangle result (Point. col row) (Point. (+ col targetCols) (+ row targetRows)) (Scalar. 0 0 255))
+  ;;(Highgui/imwrite "resources/output.png" displayImg)
+  ;(Highgui/imwrite "resources/output2.png" result)
 )
 
 (time (-main))
