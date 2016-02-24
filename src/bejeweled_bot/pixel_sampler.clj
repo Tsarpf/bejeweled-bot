@@ -12,7 +12,6 @@
         '[org.opencv.imgproc Imgproc])
 
 (def image (ImageIO/read (File. "resources/whole.png")))
-(def xy [37 49])
 (defn get-samples
   "Gets pixel color from given coordinates"
   [xy]
@@ -24,13 +23,6 @@
         blue (.getBlue color)]
     {:red red :green green :blue blue}))
   
-  ;(xy 0)(xy 1))
-
-;(def targetCols 328)
-;(def targetRows 319)
-;(def col 36)
-;(def row 120)
-
 (defn sample-pixels
   ""
   [xl yl xr yr image]
@@ -57,31 +49,3 @@
         row
         ))
     sample-coords))
-  
-  ;(Highgui/imwrite "resources/output3.png" image)
-  ;(println sample-coords)
-  ;(println (flatten sample-coords))
-  ;(println 0)
-  ;(def colors 
-  ;  (map 
-  ;    (fn [row]
-  ;      (map 
-  ;        (fn [item]
-  ;          (get-samples item))
-  ;        row))
-  ;    sample-coords))
-
-  ;(map #(map (fn [item] (println item)) %) colors)
-  ;(println (colors 0))
-  ;(println (vector colors)))
-
-
-;(println (sample-pixels col row (+ col targetCols) (+ row targetRows)))
-
-
-;
-;(flatten sample-coords)))
-;        (map
-;          (fn [item]
-;            (get-samples item))
-;          row))
