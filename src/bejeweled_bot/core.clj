@@ -14,6 +14,7 @@
 ;mat.put(0, 0, data);
 
 (use 'bejeweled-bot.gems)
+(use 'bejeweled-bot.pixel-sampler)
 
 (defn -main
   "I'm a doc string"
@@ -52,14 +53,14 @@
   (def row (Math/floor (/ (:idx derp) cols)))
   (def col (mod (:idx derp) cols))
 
+  (println col row)
+  (println targetCols targetRows)
+
   (Core/rectangle displayImg (Point. col row) (Point. (+ col targetCols) (+ row targetRows)) (Scalar. 0 0 255))
   (Core/rectangle result (Point. col row) (Point. (+ col targetCols) (+ row targetRows)) (Scalar. 0 0 255))
   (Highgui/imwrite "resources/output.png" displayImg)
   (Highgui/imwrite "resources/output2.png" result)
 
-
-
-  (get floatArr 11923)
   ;(let [robo (Robot.)]
   ;  (.mousePress robo InputEvent/BUTTON1_MASK)
   ;  (.mouseMove robo 1600 100)
