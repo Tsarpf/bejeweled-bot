@@ -9,18 +9,21 @@
    :opal        {:red 224  :green 224 :blue 224}
    :diamond     {:red 16 :green 139 :blue 254}})
 
+(defn abs [n] (max n (- n)))
+
 (defn rgb-to-gems
   [rgb-array]
 
   (map
     (fn [row]
       (fn [item]
-        ())
+        (classify item))
       row)
     rgb-array))
 
 
 ()
 (defn- classify
+  "Takes a map with red/green/blue values, returns the gem type or nil if no gem types match"
   [item]
   ())
