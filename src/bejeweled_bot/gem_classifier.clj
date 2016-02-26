@@ -15,27 +15,25 @@
   "Takes a map with red/green/blue values, returns the gem type or nil if no gem types match"
   [item]
   (def deltas 
-    (reduce 
-      (fn [acc gem]
-        (assoc acc gem
-               (+
-                (abs (- (get item :red)(get (get rgb-to-gem gem) :red)))
-                (abs (- (get item :green)(get (get rgb-to-gem gem) :green)))
-                (abs (- (get item :blue)(get (get rgb-to-gem gem) :blue))))))
-      rgb-to-gem))
-  (println
     (reduce
-      (fn [x y]
-        (min (get deltas x)(get deltas y)))
-      255 ;some relatively big number 
-      deltas)))
+      (fn [acc gem]
+        (assoc acc (first gem)
+               (+
+                (abs (- (get item :red)(:red (second gem))))
+                (abs (- (get item :green)(:green (second gem))))
+                (abs (- (get item :blue)(:blue (second gem)))))))
+      nil
+      rgb-to-gem))
+
+  ;get the smallest delta
+ ; (get (apply min-key second deltas) 0))
+  (first (apply min-key second deltas)))
 
 (defn rgb-to-gems
-  [rgb-array]
-
-  (map
-    (fn [row]
-      (fn [item]
-        (classify item))
-      row)
-    rgb-array))
+    [rgb-array]
+    (map
+      (fn [row]
+        (fn [item]
+          (classify item))
+        row)
+      rgb-array))
