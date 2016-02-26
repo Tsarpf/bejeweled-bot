@@ -12,7 +12,7 @@
 (defn abs [n] (max n (- n)))
 
 (defn classify
-  "Takes a map with red/green/blue values, returns the gem type or nil if no gem types match"
+  "Takes a map with red/green/blue values, returns the closest gem type match"
   [item]
   (def deltas 
     (reduce
@@ -25,15 +25,15 @@
       nil
       rgb-to-gem))
 
-  ;get the smallest delta
- ; (get (apply min-key second deltas) 0))
+  ;get the smallest delta. Remove 'first' to also return the delta (to ignore if it's too big f.ex?)
   (first (apply min-key second deltas)))
 
 (defn rgb-to-gems
-    [rgb-array]
-    (map
-      (fn [row]
+  [rgb-array]
+  (vec (map
+    (fn [row]
+      (vec (map
         (fn [item]
           (classify item))
-        row)
-      rgb-array))
+        row)))
+    rgb-array)))
