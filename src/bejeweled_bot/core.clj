@@ -39,21 +39,10 @@
   (def floatArr (make-array Float/TYPE (.total result)))
   (.get result 0 0 floatArr)
 
-  ;please refactor
-  (def derp
-    (reduce 
-    (fn [acc x]
-      {:max (max (:max acc) x)
-        :idx (cond
-               (> x (acc :max)) (acc :currIdx)
-               :else (acc :idx))
-        :currIdx (+ (acc :currIdx) 1)
-        })
-    {:max 0 :idx 0 :currIdx 0}
-    floatArr))
+  (def highest-index (first (apply max-key second (map vector (range) floatArr))))
 
-  (def row (Math/floor (/ (:idx derp) cols)))
-  (def col (mod (:idx derp) cols))
+  (def row (Math/floor (/ (:idx highest-index) cols)))
+  (def col (mod (:idx highest-index) cols))
 
   (def seees (sample-pixels col row (+ col targetCols) (+ row targetRows) displayImg))
   (println (solve (rgb-to-gems seees)))
