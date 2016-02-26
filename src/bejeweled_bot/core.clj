@@ -12,8 +12,8 @@
 ;Mat mat = new Mat(width, height, CvType.CV_8UC3);
 ;mat.put(0, 0, data);
 
-(use 'bejeweled-bot.pixel-sampler)
-(use 'bejeweled-bot.gem-classifier)
+(use '[bejeweled-bot.pixel-sampler :only [sample-pixels]])
+(use '[bejeweled-bot.gem-classifier :only [rgb-to-gems]])
 
 (defn -main
   "I'm a doc string"
@@ -30,13 +30,14 @@
   (.copyTo sourceImg displayImg)
   (Imgproc/matchTemplate sourceImg diamond result Imgproc/TM_CCOEFF_NORMED)
   ;(Imgproc/matchTemplate sourceImg diamond result Imgproc/TM_CCORR_NORMED)
-  (def threshold 0.8)
+  ;(def threshold 0.8)
   (Core/normalize result result 0 255 Core/NORM_MINMAX -1 (Mat.))
   ;(Highgui/imwrite "resources/output.png" result)
 
   (def floatArr (make-array Float/TYPE (.total result)))
   (.get result 0 0 floatArr)
 
+  ;please refactor
   (def derp
     (reduce 
     (fn [acc x]
@@ -53,7 +54,7 @@
   (def col (mod (:idx derp) cols))
 
   (def seees (sample-pixels col row (+ col targetCols) (+ row targetRows) displayImg))
-  (rgb-to-gems seees)
+  (println (rgb-to-gems seees)))
 
 
 
@@ -61,6 +62,4 @@
   ;(Core/rectangle result (Point. col row) (Point. (+ col targetCols) (+ row targetRows)) (Scalar. 0 0 255))
   ;;(Highgui/imwrite "resources/output.png" displayImg)
   ;(Highgui/imwrite "resources/output2.png" result)
-)
-
-(time (-main))
+;(time (-main))
