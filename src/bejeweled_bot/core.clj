@@ -13,6 +13,7 @@
 ;mat.put(0, 0, data);
 
 (use 'bejeweled-bot.pixel-sampler)
+(use 'bejeweled-bot.gem-classifier)
 
 (defn -main
   "I'm a doc string"
@@ -52,7 +53,7 @@
   (def col (mod (:idx derp) cols))
 
   (def seees (sample-pixels col row (+ col targetCols) (+ row targetRows) displayImg))
-  (println seees)
+  (rgb-to-gems seees)
 
 
 
