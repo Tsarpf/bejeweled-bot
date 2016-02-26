@@ -6,10 +6,6 @@
         '[org.opencv.highgui Highgui]
         '[org.opencv.imgproc Imgproc])
 
-;byte[] data = ((DataBufferByte) image.getRaster().getDataBuffer()).getData();
-;Mat mat = new Mat(width, height, CvType.CV_8UC3);
-;mat.put(0, 0, data);
-
 (use '[bejeweled-bot.gamearea-locator :only [find-area]])
 (use '[bejeweled-bot.pixel-sampler :only [sample-pixels]])
 (use '[bejeweled-bot.gem-classifier :only [rgb-to-gems]])

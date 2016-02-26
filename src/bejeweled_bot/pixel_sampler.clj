@@ -11,7 +11,6 @@
         '[org.opencv.highgui Highgui]
         '[org.opencv.imgproc Imgproc])
 
-(def image (ImageIO/read (File. "resources/whole.png")))
 (defn get-samples
   "Gets pixel color from given coordinates"
   [xy]
