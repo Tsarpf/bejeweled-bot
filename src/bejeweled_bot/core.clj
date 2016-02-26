@@ -14,6 +14,7 @@
 
 (use '[bejeweled-bot.pixel-sampler :only [sample-pixels]])
 (use '[bejeweled-bot.gem-classifier :only [rgb-to-gems]])
+(use '[bejeweled-bot.solver :only [solve]])
 
 (defn -main
   "I'm a doc string"
@@ -54,7 +55,9 @@
   (def col (mod (:idx derp) cols))
 
   (def seees (sample-pixels col row (+ col targetCols) (+ row targetRows) displayImg))
-  (println (rgb-to-gems seees)))
+  (println (solve (rgb-to-gems seees))))
+
+
 
 
 

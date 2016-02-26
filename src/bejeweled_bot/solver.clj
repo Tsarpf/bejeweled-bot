@@ -1,45 +1,5 @@
 (ns bejeweled-bot.solver)
 
-(defn getFirst
-  [gem-array]
-  (first (drop-while #(= nil %) (solve gem-array))))
-
-(defn solve
-  [gem-array]
-  (map-indexed
-    (fn [colIdx col]
-      (first 
-        (drop-while 
-          #(= nil %)
-          (map-indexed
-            (fn [rowIdx item]
-              (check-matches colIdx rowIdx item gem-array))
-            col))))
-    gem-array))
-
-
-(defn check-matches 
-  "Check for matches from: 1. this left, 2. left to this, 3. this down, 4. down to this"
-  [y x gem-type gem-array]
-  (let 
-    [right-x (+ x 1)
-     down-y (+ y 1)
-     right-gem-type (get-in gem-array [y right-x])
-     down-gem-type (get-in gem-array [down-y x])
-     right-swap (assoc-in 
-                     (assoc-in gem-array [y right-x] gem-type)
-                     [y x] right-gem-type)
-     down-swap (assoc-in 
-                     (assoc-in gem-array [down-y x] gem-type)
-                     [y x] down-gem-type)]
-    (cond
-      (would-match right-x y gem-type right-swap) {:x x :y y :dir "right" :gemtype gem-type}
-      (would-match x down-y gem-type down-swap) {:x x :y y :dir "down" :gemtype gem-type}
-      (would-match x y right-gem-type right-swap) {:x x :y y :dir "right" :gemtype right-gem-type}
-      (would-match x y down-gem-type down-swap) {:x x :y y :dir "down" :gemtype down-gem-type}
-      :else nil)))
-
-
 (defn would-match [y x gem-type gem-array]
   (and (not (= gem-type nil))
   (or
@@ -67,6 +27,45 @@
       (get-in gem-array [x (- y 1)])
       (get-in gem-array [x (+ y 1)])
       gem-type))))
+
+(defn check-matches 
+  "Check for matches from: 1. this left, 2. left to this, 3. this down, 4. down to this"
+  [y x gem-type gem-array]
+  (let 
+    [right-x (+ x 1)
+     down-y (+ y 1)
+     right-gem-type (get-in gem-array [y right-x])
+     down-gem-type (get-in gem-array [down-y x])
+     right-swap (assoc-in 
+                     (assoc-in gem-array [y right-x] gem-type)
+                     [y x] right-gem-type)
+     down-swap (assoc-in 
+                     (assoc-in gem-array [down-y x] gem-type)
+                     [y x] down-gem-type)]
+    (cond
+      (would-match right-x y gem-type right-swap) {:x x :y y :dir "right" :gemtype gem-type}
+      (would-match x down-y gem-type down-swap) {:x x :y y :dir "down" :gemtype gem-type}
+      (would-match x y right-gem-type right-swap) {:x x :y y :dir "right" :gemtype right-gem-type}
+      (would-match x y down-gem-type down-swap) {:x x :y y :dir "down" :gemtype down-gem-type}
+      :else nil)))
+
+(defn solve
+  [gem-array]
+  (remove nil? (map-indexed
+    (fn [colIdx col]
+      (first 
+        (drop-while 
+          #(= nil %)
+          (map-indexed
+            (fn [rowIdx item]
+              (check-matches colIdx rowIdx item gem-array))
+            col))))
+    gem-array)))
+
+
+(defn getFirst
+  [gem-array]
+  (first (drop-while #(= nil %) (solve gem-array))))
 
 
 ;; Repl test code, where are the real tests?
