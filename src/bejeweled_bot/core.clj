@@ -1,6 +1,4 @@
 (ns bejeweled-bot.core
-  (:import java.awt.Robot)
-  (:import java.awt.event.InputEvent)
   (:gen-class))
 
 (clojure.lang.RT/loadLibrary org.opencv.core.Core/NATIVE_LIBRARY_NAME)
@@ -12,6 +10,7 @@
 ;Mat mat = new Mat(width, height, CvType.CV_8UC3);
 ;mat.put(0, 0, data);
 
+(use '[bejeweled-bot.gamearea-locator :only [find-area]])
 (use '[bejeweled-bot.pixel-sampler :only [sample-pixels]])
 (use '[bejeweled-bot.gem-classifier :only [rgb-to-gems]])
 (use '[bejeweled-bot.solver :only [solve]])
@@ -20,37 +19,14 @@
 (defn -main
   "I'm a doc string"
   [& args]
-  (def sourceImg (Highgui/imread "resources/whole.png"))
-  (def diamond (Highgui/imread "resources/area.png"))
-  (def targetCols (.cols diamond))
-  (def targetRows (.rows diamond))
-  (def cols (+ (- (.cols sourceImg) targetCols) 1))
-  (def rows (+ (- (.rows sourceImg) targetRows) 1))
-  (def result (Mat.))
-  (.create result rows, cols, CvType/CV_32FC1)
-  (def displayImg (Mat.))
-  (.copyTo sourceImg displayImg)
-  (Imgproc/matchTemplate sourceImg diamond result Imgproc/TM_CCOEFF_NORMED)
-  ;(Imgproc/matchTemplate sourceImg diamond result Imgproc/TM_CCORR_NORMED)
-  ;(def threshold 0.8)
-  (Core/normalize result result 0 255 Core/NORM_MINMAX -1 (Mat.))
-  ;(Highgui/imwrite "resources/output.png" result)
-
-  (def floatArr (make-array Float/TYPE (.total result)))
-  (.get result 0 0 floatArr)
-
-  (def highest-index (first (apply max-key second (map vector (range) floatArr))))
-
-  (def row (Math/floor (/ (:idx highest-index) cols)))
-  (def col (mod (:idx highest-index) cols))
-
-  (def seees (sample-pixels col row (+ col targetCols) (+ row targetRows) displayImg))
+  (def area find-area)
+  (def col (get find-area 0))
+  (def row (get find-area 1))
+  (def targetCols (get find-area 2))
+  (def targetRows (get find-area 3))
+  (def seees (sample-pixels row col (+ col targetCols) (+ row targetRows) displayImg)) ;displayImg needs a value
   (println (solve (rgb-to-gems seees)))
-  (map drag (solve (rgb-to-gems seees))))
-
-
-
-
+  (println (map (fn [x] (drag (solve (rgb-to-gems seees)))))))
 
   ;;(Core/rectangle displayImg (Point. col row) (Point. (+ col targetCols) (+ row targetRows)) (Scalar. 0 0 255))
   ;(Core/rectangle result (Point. col row) (Point. (+ col targetCols) (+ row targetRows)) (Scalar. 0 0 255))
