@@ -4,8 +4,7 @@
   (:import java.awt.Robot)
   (:import java.awt.Color)
   (:import javax.imageio.ImageIO)
-  (:import java.io.File)
-  (:gen-class))
+  (:import java.io.File))
 
 (import '[org.opencv.core Mat Size CvType Core Point Scalar]
         '[org.opencv.highgui Highgui]
