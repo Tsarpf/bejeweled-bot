@@ -22,17 +22,21 @@
    (byte (- (bit-shift-right (bit-and int-val 0x00ff0000) 16) 128))])
    ;(byte (bit-shift-right int-val 24))]) ; we don't use alpha
 
+(defn get-image-matrix []
+  (let 
+    [robo (Robot.)
+     screenshot (.createScreenCapture robo (Rectangle. (.getScreenSize (Toolkit/getDefaultToolkit))))
+     image-ints (mat-from-buffer screenshot)
+     image-bytes (byte-array (mapcat int-to-bytes image-ints))
+     sourceImg (Mat. (.getWidth screenshot) (.getHeight screenshot) CvType/CV_8UC3)]
+    (.put sourceImg 0 0 image-bytes)
+    sourceImg))
+
 (defn find-area
   "Finds left upper corner of board area"
   []
-  ;(def sourceImg (Highgui/imread "resources/whole.png"))
-  (def robo (Robot.))
-  (def screenshot (.createScreenCapture robo (Rectangle. (.getScreenSize (Toolkit/getDefaultToolkit)))))
-  (def image-ints (mat-from-buffer screenshot))
-  (def image-bytes (byte-array (mapcat int-to-bytes image-ints)))
-  (def sourceImg (Mat. (.getWidth screenshot) (.getHeight screenshot) CvType/CV_8UC3))
-  (.put sourceImg 0 0 image-bytes)
-
+  ;Too damn many defs!
+  (def sourceImg (get-image-matrix))
   (def targetArea (Highgui/imread "resources/area.png"))
   (def targetCols (.cols targetArea))
   (def targetRows (.rows targetArea))
@@ -40,13 +44,8 @@
   (def rows (+ (- (.rows sourceImg) targetRows) 1))
   (def result (Mat.))
   (.create result rows, cols, CvType/CV_32FC1)
-  ;(def displayImg (Mat.))
-  ;(.copyTo sourceImg displayImg)
-  (Imgproc/matchTemplate sourceImg targetArea result Imgproc/TM_CCOEFF_NORMED)
-  ;(Imgproc/matchTemplate sourceImg targetArea result Imgproc/TM_CCORR_NORMED)
-  ;(def threshold 0.8)
+  (Imgproc/matchTemplate sourceImg targetArea result Imgproc/TM_CCOEFF_NORMED) ;or Imgproc/TM_CCORR_NORMED
   (Core/normalize result result 0 255 Core/NORM_MINMAX -1 (Mat.))
-  ;(Highgui/imwrite "resources/output.png" result)
 
   (def floatArr (make-array Float/TYPE (.total result)))
   (.get result 0 0 floatArr)
