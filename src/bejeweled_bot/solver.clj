@@ -69,7 +69,7 @@
       gem-type))))
 
 
-;; Repl test code
+;; Repl test code, where are the real tests?
 ;
 ;(def x 0)
 ;(def y 1)
