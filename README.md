@@ -4,4 +4,4 @@ Starts by searching for the game area from the whole screen using OpenCV. It's r
 
 High score 1,68 million with boosts!
 
-`lein uberjar` to compile, change OpenCV path in run.sh to where you installed it yourself and then `./run.sh`
+`lein uberjar` to compile, change OpenCV path in run.sh to where you installed it, then `./run.sh`
