@@ -2,33 +2,45 @@
   (:import java.awt.Robot)
   (:import org.opencv.highgui.Highgui)
   (:import org.opencv.imgproc.Imgproc)
+  (:import org.opencv.core.CvType)
   (:import org.opencv.core.Mat)
   (:import org.opencv.core.Core)
+  (:import org.opencv.core.Point)
+  (:import org.opencv.core.Scalar)
   (:import java.awt.Rectangle)
   (:import java.awt.image.BufferedImage)
   (:import java.awt.image.DataBufferInt)
   (:import java.awt.Toolkit))
 
-(defn mat-from-buffer
+(def robo (Robot.))
+
+(defn ints-from-image
   [image]
   (int-array (.getData (cast DataBufferInt (.getDataBuffer (.getRaster image))))))
 
 
-(def int-val 0x00ffffff)
+(def int-val 0x00000011)
 (defn int-to-bytes
   [int-val]
-  [(byte (- (bit-and int-val 0x000000ff) 128))
-   (byte (- (bit-shift-right (bit-and int-val 0x0000ff00) 8) 128))
-   (byte (- (bit-shift-right (bit-and int-val 0x00ff0000) 16) 128))])
+  [
+   (unchecked-byte (bit-shift-right (bit-and int-val 0x000000ff) 0))
+   (unchecked-byte (bit-shift-right (bit-and int-val 0x0000ff00) 8))
+   (unchecked-byte (bit-shift-right (bit-and int-val 0x00ff0000) 16))
+   ])
    ;(byte (bit-shift-right int-val 24))]) ; we don't use alpha
+
+(defn get-screen []
+  (.createScreenCapture robo (Rectangle. (.getScreenSize (Toolkit/getDefaultToolkit)))))
+
+(defn get-bytes [int-seq]
+  (byte-array (mapcat int-to-bytes int-seq)))
 
 (defn get-image-matrix []
   (let 
-    [robo (Robot.)
-     screenshot (.createScreenCapture robo (Rectangle. (.getScreenSize (Toolkit/getDefaultToolkit))))
-     image-ints (mat-from-buffer screenshot)
-     image-bytes (byte-array (mapcat int-to-bytes image-ints))
-     sourceImg (Mat. (.getWidth screenshot) (.getHeight screenshot) CvType/CV_8UC3)]
+    [screenshot (get-screen)
+     image-ints (ints-from-image screenshot)
+     image-bytes (get-bytes image-ints)
+     sourceImg (Mat. (.getHeight screenshot) (.getWidth screenshot) CvType/CV_8UC3)]
     (.put sourceImg 0 0 image-bytes)
     sourceImg))
 
@@ -43,7 +55,7 @@
   (def cols (+ (- (.cols sourceImg) targetCols) 1))
   (def rows (+ (- (.rows sourceImg) targetRows) 1))
   (def result (Mat.))
-  (.create result rows, cols, CvType/CV_32FC1)
+  (.create result rows cols CvType/CV_8UC3)
   (Imgproc/matchTemplate sourceImg targetArea result Imgproc/TM_CCOEFF_NORMED) ;or Imgproc/TM_CCORR_NORMED
   (Core/normalize result result 0 255 Core/NORM_MINMAX -1 (Mat.))
 
@@ -54,5 +66,10 @@
 
   (def row (Math/floor (/ highest-index cols)))
   (def col (mod highest-index cols))
-  {:col col :row row :area-columns targetCols :area-rows targetRows})
+  (let [debug-mat (Mat.)]
+    (.create debug-mat (.rows sourceImg) (.cols sourceImg) CvType/CV_8UC3)
+    (.copyTo sourceImg debug-mat)
+    (Core/rectangle debug-mat (Point. col row) (Point. (+ col targetCols) (+ row targetRows)) (Scalar. 0 0 255))
+    (Highgui/imwrite "resources/debug-output.png" debug-mat))
 
+  {:col col :row row :area-columns targetCols :area-rows targetRows})
