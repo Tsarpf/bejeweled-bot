@@ -13,19 +13,16 @@
 (defn get-samples
   "Gets pixel color from given coordinates"
   [xy image]
-  ;(println (str "asking for: " xy))
   (let [color-int (.getRGB image (xy 0) (xy 1))
         color (Color. color-int)
         red (.getRed color)
         green (.getGreen color)
         blue (.getBlue color)]
-    ;(println "cheers")
     {:red red :green green :blue blue}))
   
 (defn sample-pixels
   ""
   [xl yl xr yr image]
-  ;(println (str "sampling: xl " xl " yl " yl " xr " xr " yr "yr))
   (def robo (Robot.))
   (def jewel-length 40)
   (def offset-x 43)
@@ -33,11 +30,11 @@
 
   (def sample-coords (map-indexed
     (fn 
-      [idx item]
+      [idx y]
       (map-indexed
         (fn
-          [idxfdsa itemfdsa]
-          [itemfdsa item])
+          [idxfdsa x]
+          [x y])
         (apply vector (range offset-x (+ offset-x (* 8 jewel-length)) jewel-length))))
     (apply vector (range offset-y (+ offset-y (* 8 jewel-length)) jewel-length))))
   (map 
@@ -45,7 +42,6 @@
       (map
         (fn [x] 
           (get-samples x image))
-          ;(Core/circle image (Point. (x 0) (x 1)) 5 (Scalar. 0 0 255)))
         row
         ))
     sample-coords))

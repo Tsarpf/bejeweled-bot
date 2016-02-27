@@ -26,7 +26,6 @@
    (unchecked-byte (bit-shift-right (bit-and int-val 0x0000ff00) 8))
    (unchecked-byte (bit-shift-right (bit-and int-val 0x00ff0000) 16))
    ])
-   ;(byte (bit-shift-right int-val 24))]) ; we don't use alpha
 
 (defn get-screen []
   (.createScreenCapture robo (Rectangle. (.getScreenSize (Toolkit/getDefaultToolkit)))))

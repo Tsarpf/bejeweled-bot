@@ -11,13 +11,6 @@
 (def offset-x 43)
 (def offset-y 39)
 
-(defn debug-draw
-  [from to img]
-  (
-    (Core/rectangle img (Point. (from 0) (to 0)) (Point. (to 0) (to 1)) (Scalar. 0 0 255))
-    (Highgui/imwrite "resources/move-debug-output.png" img))
-   )
-
 (defn drag
   "Drags mouse according to given positions"
   [move area-offset-x area-offset-y]
@@ -33,6 +26,5 @@
       (.mouseMove robo to-x y)
       (.mouseMove robo x to-y))
     (.mouseRelease robo InputEvent/BUTTON1_MASK)
-    ;(debug-draw [x y] [to-x to-y] img)
     "moved"))
 

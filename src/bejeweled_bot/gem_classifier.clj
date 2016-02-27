@@ -25,7 +25,7 @@
       nil
       rgb-to-gem))
 
-  ;get the smallest delta. Remove 'first' to also return the delta (to ignore if it's too big f.ex?)
+  ;get the gem type with smallest delta. Remove 'first' to return the actual delta as well.
   (first (apply min-key second deltas)))
 
 (defn rgb-to-gems

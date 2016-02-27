@@ -54,8 +54,3 @@
         (repeatedly 
           #(take-screenshot col row targetCols targetRows))))))
 
-;;(Core/rectangle displayImg (Point. col row) (Point. (+ col targetCols) (+ row targetRows)) (Scalar. 0 0 255))
-;(Core/rectangle result (Point. col row) (Point. (+ col targetCols) (+ row targetRows)) (Scalar. 0 0 255))
-;;(Highgui/imwrite "resources/output.png" displayImg)
-;(Highgui/imwrite "resources/output2.png" result)
-;(time (-main))
