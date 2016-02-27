@@ -1,6 +1,6 @@
 # bejeweled-bot
 
-Searches the game area using OpenCV. It's really slow. Then samples individual pixels from pictures taken with java Robot class. Robot is also used in mouse driver.
+Starts by searching for the game area from the whole screen using OpenCV. It's really slow. After that samples individual pixels from screenshots taken with java Robot class. Robot is also used in mouse driver.
 
 High score 1,68 million with boosts!
 
