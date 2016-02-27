@@ -36,20 +36,19 @@
   ;solve
   ;move
   (def finished (promise))
-  (def timer (future (Thread/sleep 10000) (deliver finished true)))
-  (println 
-    (map 
+  (def timer (future (Thread/sleep 910000) (deliver finished true)))
+    (dorun (map 
       (fn [screenshot]
         (let 
           [samples (sample-pixels row col (+ row targetRows) (+ col targetCols) screenshot)
            gems (rgb-to-gems samples)
            moves (solve gems)]
-          (map 
+          (dorun (map 
             (fn 
               [item]
-              (Thread/sleep 1000)
-              (drag item row col))
-            moves)))
+              (Thread/sleep 50)
+              (drag item col row))
+            moves))))
       (take-while 
         (fn [item] (not (realized? finished)))
         (repeatedly 
