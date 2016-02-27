@@ -1,35 +1,62 @@
 (ns bejeweled-bot.core
+  (:import java.awt.Robot)
+  (:import java.awt.Toolkit)
+  (:import java.awt.Rectangle)
   (:gen-class))
 
 (clojure.lang.RT/loadLibrary org.opencv.core.Core/NATIVE_LIBRARY_NAME)
-(import '[org.opencv.core Mat Size CvType Core Point Scalar]
-        '[org.opencv.highgui Highgui]
-        '[org.opencv.imgproc Imgproc])
 
-;byte[] data = ((DataBufferByte) image.getRaster().getDataBuffer()).getData();
-;Mat mat = new Mat(width, height, CvType.CV_8UC3);
-;mat.put(0, 0, data);
-
-(use '[bejeweled-bot.gamearea-locator :only [find-area]])
+(use '[bejeweled-bot.game-area-locator :only [find-area]])
 (use '[bejeweled-bot.pixel-sampler :only [sample-pixels]])
 (use '[bejeweled-bot.gem-classifier :only [rgb-to-gems]])
 (use '[bejeweled-bot.solver :only [solve]])
 (use '[bejeweled-bot.robot-moves :only [drag]])
 
+(def robo (Robot.))
+(defn take-screenshot 
+  [x y cols rows]
+  (println "took shot")
+  (.createScreenCapture robo (Rectangle. x y cols rows)))
+
 (defn -main
   "I'm a doc string"
   [& args]
-  (def area find-area)
-  (def col (get find-area 0))
-  (def row (get find-area 1))
-  (def targetCols (get find-area 2))
-  (def targetRows (get find-area 3))
-  (def seees (sample-pixels row col (+ col targetCols) (+ row targetRows) displayImg)) ;displayImg needs a value
-  (println (solve (rgb-to-gems seees)))
-  (println (map (fn [x] (drag (solve (rgb-to-gems seees)))))))
+  (println "searching for area...")
+  (def area (find-area))
+  (def col (area :col))
+  (def row (area :row))
+  (def targetCols (area :area-columns))
+  (def targetRows (area :area-rows))
 
-  ;;(Core/rectangle displayImg (Point. col row) (Point. (+ col targetCols) (+ row targetRows)) (Scalar. 0 0 255))
-  ;(Core/rectangle result (Point. col row) (Point. (+ col targetCols) (+ row targetRows)) (Scalar. 0 0 255))
-  ;;(Highgui/imwrite "resources/output.png" displayImg)
-  ;(Highgui/imwrite "resources/output2.png" result)
+  (println (str "area found"))
+
+  ;screenshot
+  ;sample
+  ;classify
+  ;solve
+  ;move
+  (def finished (promise))
+  (def timer (future (Thread/sleep 10000) (deliver finished true)))
+  (println 
+    (map 
+      (fn [screenshot]
+        (let 
+          [samples (sample-pixels row col (+ row targetRows) (+ col targetCols) screenshot)
+           gems (rgb-to-gems samples)
+           moves (solve gems)]
+          (map 
+            (fn 
+              [item]
+              (Thread/sleep 1000)
+              (drag item row col))
+            moves)))
+      (take-while 
+        (fn [item] (not (realized? finished)))
+        (repeatedly 
+          #(take-screenshot col row targetCols targetRows))))))
+
+;;(Core/rectangle displayImg (Point. col row) (Point. (+ col targetCols) (+ row targetRows)) (Scalar. 0 0 255))
+;(Core/rectangle result (Point. col row) (Point. (+ col targetCols) (+ row targetRows)) (Scalar. 0 0 255))
+;;(Highgui/imwrite "resources/output.png" displayImg)
+;(Highgui/imwrite "resources/output2.png" result)
 ;(time (-main))
