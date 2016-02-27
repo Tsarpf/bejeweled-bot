@@ -1,6 +1,6 @@
 (ns bejeweled-bot.game-area-locator-test
   (:require [clojure.test :refer :all]
-            [bejeweled-bot.gamearea-locator :refer :all]))
+            [bejeweled-bot.game-area-locator :refer :all]))
 (use '[clojure.string :only (join split)])
 
 

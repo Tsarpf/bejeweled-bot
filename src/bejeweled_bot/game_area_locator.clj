@@ -1,4 +1,4 @@
-(ns bejeweled-bot.gamearea-locator
+(ns bejeweled-bot.game-area-locator
   (:import java.awt.Robot)
   (:import org.opencv.highgui.Highgui)
   (:import org.opencv.imgproc.Imgproc)
@@ -19,7 +19,6 @@
   (int-array (.getData (cast DataBufferInt (.getDataBuffer (.getRaster image))))))
 
 
-(def int-val 0x00000011)
 (defn int-to-bytes
   [int-val]
   [

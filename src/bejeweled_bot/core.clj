@@ -6,7 +6,7 @@
 
 (clojure.lang.RT/loadLibrary org.opencv.core.Core/NATIVE_LIBRARY_NAME)
 
-(use '[bejeweled-bot.gamearea-locator :only [find-area]])
+(use '[bejeweled-bot.game-area-locator :only [find-area]])
 (use '[bejeweled-bot.pixel-sampler :only [sample-pixels]])
 (use '[bejeweled-bot.gem-classifier :only [rgb-to-gems]])
 (use '[bejeweled-bot.solver :only [solve]])
