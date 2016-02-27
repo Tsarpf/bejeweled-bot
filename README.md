@@ -1,36 +1,7 @@
 # bejeweled-bot
 
-FIXME: description
+Searches the game area using OpenCV. It's really slow. Then samples individual pixels from pictures taken with java Robot class. Robot is also used in mouse driver.
 
-## Installation
+High score 1,68 million with boosts!
 
-Download from http://example.com/FIXME.
-
-## Usage
-
-FIXME: explanation
-
-    $ java -jar bejeweled-bot-0.1.0-standalone.jar [args]
-
-## Options
-
-FIXME: listing of options this app accepts.
-
-## Examples
-
-...
-
-### Bugs
-
-...
-
-### Any Other Sections
-### That You Think
-### Might be Useful
-
-## License
-
-Copyright © 2016 FIXME
-
-Distributed under the Eclipse Public License either version 1.0 or (at
-your option) any later version.
+`lein uberjar` to compile, change OpenCV path in run.sh to where you installed it yourself and then `./run.sh`
