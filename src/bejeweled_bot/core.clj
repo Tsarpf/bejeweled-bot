@@ -36,7 +36,7 @@
   ;solve
   ;move
   (def finished (promise))
-  (def timer (future (Thread/sleep 910000) (deliver finished true)))
+  (def timer (future (Thread/sleep 100000) (deliver finished true))) ;run for 100 seconds
     (dorun (map 
       (fn [screenshot]
         (let 
